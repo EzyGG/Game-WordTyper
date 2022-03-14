@@ -1,11 +1,9 @@
 import random as r
-
 import time as t
-
 import unidecode as u
-
 import pygame
 from pygame.locals import *
+
 pygame.init()
 
 WHITE = "#FFFFFF"
@@ -16,7 +14,7 @@ DARKGREEN = "#228B22"
 GOLD = "#EEC900"
 BEIGE = "#FFF8DC"
 
-POLICE = "MVSansBold.ttf"
+POLICE = "./resources/MVSansBold.ttf"
 
 START = "start"
 READY = "ready"
@@ -27,7 +25,7 @@ LAST = "last"
 FIRST = "first"
 
 pygame.display.set_caption('Word Typer')
-icon = pygame.image.load("icon.png")
+icon = pygame.image.load("./resources/icon.png")
 pygame.display.set_icon(icon)
 window = pygame.display.set_mode((800, 600))
 window.fill(BEIGE)
@@ -124,7 +122,7 @@ def readyMenu():
 	writeLilText("(press enter to start)", 240, 95, BLACK)
 
 def getFile():
-	fichier = open("word_data.txt", "r")
+	fichier = open("./resources/word_data.txt", "r")
 	wordList = fichier.read().split(', ')
 	fichier.close()
 	return wordList
@@ -151,11 +149,20 @@ def clearText():
 def getWordList2():
 	wordList2 = []
 	wordList = getFile()
-	while len(wordList2) != 50:
-		randomNumber = r.randint(0, len(wordList) - 1)
-		randomWord = u.unidecode(wordList[randomNumber])
-		if randomWord not in wordList2 and randomWord.isalpha():
-			wordList2.append(randomWord)
+	nbWord = 0
+	while not 150 < nbWord < 160:
+		while len(wordList2) != 25:
+			randomNumberData = r.randint(0, len(wordList) - 1)
+			randomWordData = u.unidecode(wordList[randomNumberData])
+			if randomWordData not in wordList2 and randomWordData.isalpha():
+				wordList2.append(randomWordData)
+				nbWord += len(randomWordData)
+		if not 150 < nbWord < 160:
+			randomNumberList = r.randint(0, len(wordList2) - 1)
+			randomWordList = wordList2[randomNumberList]
+			wordList2.remove(randomWordList)
+
+
 	return wordList2
 
 def clearWindow():
@@ -253,6 +260,23 @@ def main():
 				timeTurn = FIRST
 				score = 0
 				readyMenu()
+
+			elif step == END and event.type == KEYDOWN and event.key == K_RETURN:
+				step = READY
+				answer = ""
+				numWord = 0
+				word = ""
+				nbrLettre = 0
+				wordTyped = ""
+				points = 0
+				t0 = 0
+				time = 0
+				wordTurn = FIRST
+				scoreTurn = FIRST
+				timeTurn = FIRST
+				score = 0
+				readyMenu()
+				print("restart ok")
 
 			elif userQuitGame(event):
 				step = START
