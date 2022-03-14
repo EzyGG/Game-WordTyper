@@ -245,23 +245,7 @@ def main():
 					print()
 					print("lettre ok")
 
-			elif step == END and event.type == MOUSEBUTTONDOWN and event.button == 1 and 270 < event.pos[0] < 470 and 120 < event.pos[1] < 220:
-				step = READY
-				answer = ""
-				numWord = 0
-				word = ""
-				nbrLettre = 0
-				wordTyped = ""
-				points = 0
-				t0 = 0
-				time = 0
-				wordTurn = FIRST
-				scoreTurn = FIRST
-				timeTurn = FIRST
-				score = 0
-				readyMenu()
-
-			elif step == END and event.type == KEYDOWN and event.key == K_RETURN:
+			elif step == END and event.type == MOUSEBUTTONDOWN and event.button == 1 and 270 < event.pos[0] < 470 and 120 < event.pos[1] < 220 or step == END and event.type == KEYDOWN and event.key == K_RETURN:
 				step = READY
 				answer = ""
 				numWord = 0
