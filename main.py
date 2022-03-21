@@ -1,3 +1,4 @@
+import sys
 import random as r
 import time as t
 import unidecode as u
@@ -24,7 +25,6 @@ FIRST = "first"
 
 # API Initialization
 
-import sys
 from tkinter import *
 from ezyapi.UUID import UUID
 import ezyapi.game_manager as manager
@@ -120,7 +120,7 @@ except DatabaseConnexionError as e:
 # Force Refresh Word Data (.temp files) and Icon
 _ = [r.save_by_erasing("resources", name="icon" if r.specification == "icon" else None)
      if r.type == "temp" or r.specification == "icon" else r.save_if_doesnt_exists("resources")
-     for r in manager.import_resources(GAME_UUID)]
+     for r in manager.import_resources(GAME_UUID) if r.specification not in ["thumbnail", "game"]]
 
 ###
 
@@ -383,7 +383,10 @@ def main():
 
             elif event.type == QUIT:
                 continuer = 0
-                exit()
+                try:
+                    sys.exit(1)
+                except NameError:
+                    quit(1)
 
             pygame.display.flip()
 
