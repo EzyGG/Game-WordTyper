@@ -34,7 +34,7 @@ from ezyapi.mysql_connection import DatabaseConnexionError
 
 
 GAME_UUID = UUID("6d5ee3d7-35e5-411e-38a1-0eab2b9ef338")
-GAME_VERSION = GameVersion("v2.0")
+GAME_VERSION = GameVersion("v2.1")
 
 
 class Error(Tk):
@@ -106,7 +106,7 @@ class Error(Tk):
 CONTINUE = "\n\nIf you Continue, you will not be able to get rewards and update the ranking."
 try:
     try:
-        manager.setup(GAME_UUID, GAME_VERSION)
+        manager.setup(GAME_UUID, GAME_VERSION, __import_missing_resources=False)
     except manager.UserParameterExpected as e:
         Error("UserParameterExpected", str(e) + "\nYou must run the game from the Launcher to avoid this error." + CONTINUE)
     except UserNotFoundException as e:
@@ -118,7 +118,9 @@ except DatabaseConnexionError as e:
           str(e) + "\nThe SQL Serveur is potentially down for maintenance...\nWait and Retry Later." + CONTINUE)
 
 # Force Refresh Word Data (.temp files) and Icon
-_ = [r.save_by_erasing("resources", name="icon" if r.specification == "icon" else None) for r in manager.import_resources(GAME_UUID) if r.type == "temp" or r.specification == "icon"]
+_ = [r.save_by_erasing("resources", name="icon" if r.specification == "icon" else None)
+     if r.type == "temp" or r.specification == "icon" else r.save_if_doesnt_exists("resources")
+     for r in manager.import_resources(GAME_UUID)]
 
 ###
 
